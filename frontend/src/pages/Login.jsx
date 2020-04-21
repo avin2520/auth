@@ -7,26 +7,50 @@ import {Link} from 'react-router-dom'
 
 class Login extends React.Component{
   state={
-    loading : false
+    loading : false , data : null,days: 0
 }
 onLoginBtnClick = () => {
-  this.setState({loading : true})
-
+  this.setState({loading : true})    
+  const new_date = new Date ()    
+  
   const email = this.refs.email.value
   const password = this.refs.password.value
+ 
   const data = {
       email,
-      password
+      password,
+      time : new_date,
+      //  days : this.state.days
   }
   if(email && password){
       Axios.post('http://localhost:9000/auth/login' , data)
       .then((res) => {
-          // console.log(res.data)
-          // alert(res.data.message)
+          
           console.log(res.data)
+          // this.setState({data : res.data.data})
+
+          // const date2 = new Date(`${new_date}`)
+          // console.log(date2)
+          // // const date1= new Date(`${this.state.data.time}`)
+          // const date1= new Date(`2020-04-10T19:41:53.222Z`)
+          // console.log(date1)
+          // const interval = date2.getTime()- date1.getTime()
+          // const different_in_days= interval/(1000*3600*24)
+          // this.setState({days : different_in_days})
+          // console.log(this.state.days)
+
           localStorage.setItem('token' ,res.data.token)
-          alert(res.data.message)
-          window.location = '/product-list'
+       
+
+          // if(this.state.days <= 7){
+            window.location = '/product-list'
+            alert(res.data.message)
+
+          // }else{
+          //   alert('check your email to insert token for login')
+          // }
+
+
       })
       .catch((err) => {
           alert(err.message)
@@ -35,6 +59,8 @@ onLoginBtnClick = () => {
       alert("All form must be filled")
   }
 
+
+  // this.setState({days : different_in_days})
   this.setState({loading : false})
   this.refs.email.value = ''
 this.refs.password.value = ''

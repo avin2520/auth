@@ -200,10 +200,43 @@ function reset (req,res) {
     })
 
 }
+function verifycode(req,res){
+    const data = req.body
+    console.log(data)
+    const token = req.params.token
+    const dataToken = decodeToken(token)
+    let sql = 'select * from users where id = ?;'
+    db.query(sql,dataToken.id,(err,result)=>{
+        console.log('masuuuuk')
+        try{
+            if(err)throw err
+            console.log(result)
+            if(data.code !== result[0].code)throw{error : true, message : "Code Yang Anda Masukkan Salah"}
+            // const dataUser = result[0]
+            // const token =createJwt({id:dataUser.id,email:dataUser.email,role:dataUser.role})
+            res.json({
+                error : false,
+                message : "Selamat Anda Berhasil Login",
+                // data : {id:dataUser.id,email:dataUser.email,role:dataUser.role},
+                // token : token
+            })
+
+
+        }catch(err){
+            res.json({
+                error : true,
+                message : err.message
+            })
+
+        }
+    })
+
+}
 
 function login (req,res){
     //ambil datanya pakai req
     const data = req.body // {password : 123123, email : fikri@fikri.com}
+    console.log(data)
     //hash password
     const afterHashing = passwordHasher(data.password)
     data.password  = afterHashing
@@ -219,15 +252,72 @@ function login (req,res){
             const dataUser = result[0]
             const token =createJwt({id:dataUser.id,email:dataUser.email,role:dataUser.role})
 
+            const date2 = new Date(`${data.time}`)
+            console.log(date2)
+            const date1= new Date(`${dataUser.time}`)
+            // const date1= new Date(`2020-04-10T19:41:53.222Z`)
+            console.log(date1)
+            const interval = date2.getTime()- date1.getTime()
+            const days= interval/(1000*3600*24)
+           
+            if (days > 7){                
+                const code = Math.floor(Math.random() * 1000000 + 1)
+                let sql =`update users set code = ? where email =?;`
+                console.log('masuk')
+                db.query(sql,[code, data.email],(err,result)=>{
+                    try{
+                        if(err) throw err
+                        transporter.sendMail({
+                            from : "Toko Berkah",
+                            to : data.email,
+                            subject : "INPUT THE CODE FOR LOGIN!!!",
+                            html : `
+                                <h1> Click Link <a href='http://localhost:3000/verifycode/${token}'> Here </a>, to login input this code ${code}
+                            `
+                        }).then((response)=>{
+                             res.json({
+                                error : false,
+                                message : "You Need To Input A Code To Login, Check Your Email"
+                            })
+        
+                        }).catch((err)=>{
+                            console.log(err)
+                        })    
+                    }catch(err){
+                        res.json({
+                            error : true,
+                            message : err.message
+                        })
+                    }
+                })      
 
+            }else{
+                res.json({
+                    error : false,
+                    message : "Login Success",
+                    data : {id:dataUser.id,email:dataUser.email,role:dataUser.role,time:dataUser.time},
+                    token : token
+                })
+    
+                let sql =`update users set time = ? where email =?;`
+                console.log('masuk')
+                db.query(sql,[data.time, data.email],(err,result)=>{
+                    try{
+                        if(err) throw err
+                        console.log(dataUser)
+    
+                    }catch(err){
+                        res.json({
+                            error : true,
+                            message : err.message
+                        })
+                    }
+                })
+            }
 
-            res.json({
-                error : false,
-                message : "Login Success",
-                data : {id:dataUser.id,email:dataUser.email,role:dataUser.role},
-                token : token
-            })
-        }catch(err){
+        }
+        catch(err){
+         
             res.json({
                 error : true,
                 message : err.message
@@ -242,5 +332,6 @@ module.exports = {
    verify : verify,
    login : login,
    forget : forget,
-   reset : reset
+   reset : reset,
+   verifycode : verifycode
 }

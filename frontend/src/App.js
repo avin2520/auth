@@ -7,6 +7,7 @@ import VerificationSuccess from './pages/VerificationSuccess';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import ProductList from './pages/ProductList';
+import VerifyCode from './pages/verifycode';
 
 class App extends React.Component{
   render(){
@@ -38,6 +39,10 @@ class App extends React.Component{
       </Route>
       <Route path = '/product-list'>
         <ProductList/>
+      </Route>
+
+      <Route path = '/verifycode'>
+        <VerifyCode/>
       </Route>
      
       </BrowserRouter>

@@ -8,5 +8,6 @@ Router.post('/login', Controller.login)
 Router.post('/testauth',Controller.testNodemailer)
 Router.post('/forget',Controller.forget)
 Router.patch('/reset/:token',Controller.reset)
+Router.post('/verifycode/:token',Controller.verifycode)
 
 module.exports= Router
