@@ -212,13 +212,13 @@ function verifycode(req,res){
             if(err)throw err
             console.log(result)
             if(data.code !== result[0].code)throw{error : true, message : "Code Yang Anda Masukkan Salah"}
-            // const dataUser = result[0]
-            // const token =createJwt({id:dataUser.id,email:dataUser.email,role:dataUser.role})
+            const dataUser = result[0]
+            const token =createJwt({id:dataUser.id,email:dataUser.email,role:dataUser.role})
             res.json({
                 error : false,
                 message : "Selamat Anda Berhasil Login",
-                // data : {id:dataUser.id,email:dataUser.email,role:dataUser.role},
-                // token : token
+                data : {id:dataUser.id,email:dataUser.email,role:dataUser.role},
+                token : token
             })
 
 
@@ -254,11 +254,13 @@ function login (req,res){
 
             const date2 = new Date(`${data.time}`)
             console.log(date2)
-            const date1= new Date(`${dataUser.time}`)
-            // const date1= new Date(`2020-04-10T19:41:53.222Z`)
+            // const date1= new Date(`${dataUser.time}`)
+            const date1= new Date(`2020-04-10T19:41:53.222Z`)
             console.log(date1)
             const interval = date2.getTime()- date1.getTime()
             const days= interval/(1000*3600*24)
+
+          
            
             if (days > 7){                
                 const code = Math.floor(Math.random() * 1000000 + 1)

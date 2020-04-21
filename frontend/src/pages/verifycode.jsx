@@ -16,8 +16,9 @@ class VerifyCode extends React.Component{
                 .then((res) => {
                     console.log(res.data)
                     if(res.data.error === false){
+                        localStorage.setItem('token' ,res.data.token)
                         alert(res.data.message)
-                        window.location = '/login'
+                        window.location = '/product-list'
 
                     }
                     if(res.data.error === true){
