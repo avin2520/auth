@@ -35,7 +35,7 @@ onLoginBtnClick = () => {
           const date1= new Date(`2020-04-10T19:41:53.222Z`)
           console.log(date1)
           const interval = date2.getTime()- date1.getTime()
-          const different_in_days= interval/(1000*3600*24)
+          const different_in_days= Math.round(interval/(1000*3600*24))
           this.setState({days : different_in_days})
           console.log(this.state.days)
 

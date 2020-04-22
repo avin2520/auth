@@ -258,7 +258,7 @@ function login (req,res){
             const date1= new Date(`2020-04-10T19:41:53.222Z`)
             console.log(date1)
             const interval = date2.getTime()- date1.getTime()
-            const days= interval/(1000*3600*24)
+            const days= Math.round(interval/(1000*3600*24))
 
           
            
