@@ -32,21 +32,21 @@ onLoginBtnClick = () => {
           const date2 = new Date(`${new_date}`)
           console.log(date2)
           // const date1= new Date(`${this.state.data.time}`)
-          const date1= new Date(`2020-04-10T19:41:53.222Z`)
-          console.log(date1)
-          const interval = date2.getTime()- date1.getTime()
-          const different_in_days= Math.round(interval/(1000*3600*24))
-          this.setState({days : different_in_days})
-          console.log(this.state.days)
+          // const date1= new Date(`2020-04-10T19:41:53.222Z`)
+          // console.log(date1)
+          // const interval = date2.getTime()- date1.getTime()
+          // const different_in_days= Math.round(interval/(1000*3600*24))
+          // this.setState({days : different_in_days})
+          // console.log(this.state.days)
 
           localStorage.setItem('token' ,res.data.token)
-          if(this.state.days <= 7){
+          // if(this.state.days <= 7){
             window.location = '/product-list'
             alert(res.data.message)
 
-          }else{
-            alert('check your email to insert token for login')
-          }
+          // }else{
+          //   alert('check your email to insert token for login')
+          // }
 
        
 
